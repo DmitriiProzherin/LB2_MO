@@ -5,6 +5,6 @@ public class Main {
 
         double min = search.naive(2, 10, 0.001);
 
-        System.out.printf("\nМинимальное значение функции: %.12f", min);
+        System.out.printf("Минимальное значение функции: %.12f", min);
     }
 }
