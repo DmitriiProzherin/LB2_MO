@@ -3,7 +3,7 @@ public class Main {
 
         HalfDivisionSearch search = new HalfDivisionSearch();
 
-        double min = search.naive(2, 10, 0.001);
+        double min = search.naive(-11, 1, 0.01);
 
         System.out.printf("Минимальное значение функции: %.12f", min);
     }
