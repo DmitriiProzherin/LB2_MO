@@ -14,7 +14,6 @@ public class HalfDivisionSearch {
     public double naive(double a, double b, double eps){
         assert b>a;
         assert  eps>0;
-        int step = 0;
 
         double length = Math.abs(b - a);
         double mid = a + length / 2.0;
@@ -29,7 +28,6 @@ public class HalfDivisionSearch {
 
             length = Math.abs(right - left);
             mid = min_func_val(left, mid, right);
-            step++;
 
             outTable.add(wr(length, a, b, left, mid, right, f(left), f(mid), f(right)));
         }
@@ -38,9 +36,7 @@ public class HalfDivisionSearch {
         System.out.printf("%16s%16s%17s%16s%16s\n"," x_1/2", "x_3/4", "f(x_1/4)","f(x_1/2)", "f(x_3/4)");
         outTable.forEach(l -> {
             System.out.print(outTable.indexOf(l)+"\t");
-            for (int i = 0; i < l.length; i++) {
-                System.out.print("\t\t" + l[i]);
-            }
+            for (String s : l) { System.out.print("\t\t" + s); }
             System.out.println();
         });
 
