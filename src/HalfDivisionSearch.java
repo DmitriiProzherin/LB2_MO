@@ -40,7 +40,7 @@ public class HalfDivisionSearch {
             System.out.println();
         });
 
-        return mid;
+        return f(mid);
     }
 
     private double min_func_val(double a, double b, double c){
