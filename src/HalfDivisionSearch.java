@@ -16,7 +16,7 @@ public class HalfDivisionSearch {
         assert  eps>0;
         int step = 0;
 
-        double length = b - a;
+        double length = Math.abs(b - a);
         double mid = a + length / 2.0;
         double left = a, right = b;
 
@@ -27,9 +27,8 @@ public class HalfDivisionSearch {
             left = mid - length / 4.0;
             right = mid + length / 4.0;
 
-            length = right - left;
+            length = Math.abs(right - left);
             mid = min_func_val(left, mid, right);
-
             step++;
 
             outTable.add(wr(length, a, b, left, mid, right, f(left), f(mid), f(right)));
@@ -49,7 +48,11 @@ public class HalfDivisionSearch {
     }
 
     private double min_func_val(double a, double b, double c){
-        return Math.min(Math.min(f(a), f(b)), f(c));
+        double min_f = Math.min(Math.min(f(a), f(b)), f(c));
+        if (Math.abs(min_f - f(a)) < eps) return a;
+        if (Math.abs(min_f - f(b)) < eps) return b;
+        if (Math.abs(min_f - f(c)) < eps) return c;
+        return 0;
     }
 
     private String[] wr(double b1, double b2, double b3, double b4, double b5, double b6, double b7, double b8, double b9){
