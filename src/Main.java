@@ -3,8 +3,8 @@ public class Main {
 
         HalfDivisionSearch search = new HalfDivisionSearch();
 
-        double min = search.naive(-11, 1, 0.01);
+        double min = search.naive(0, 1, 0.4);
 
-        System.out.printf("Минимальное значение функции: %.12f", min);
+       // System.out.printf("Минимальное значение функции: %.12f", min);
     }
 }

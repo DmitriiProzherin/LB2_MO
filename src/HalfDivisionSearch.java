@@ -1,46 +1,102 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class HalfDivisionSearch {
 
     private final double eps = 1e-20;
-    private final ArrayList<String[]> outTable = new ArrayList<>();
+    private int func_call_amount = 0;
+    private int step_number = 0;
+    private double f_min;
 
     private double f(double x){
-        return Math.sin(x)*Math.pow(x, 3);
+        func_call_amount++;
+        return Math.pow(x, 2);
     }
 
 
     public double naive(double a, double b, double eps){
         assert b>a;
-        assert  eps>0;
+        assert eps>0;
 
-        double length = Math.abs(b - a);
-        double mid = a + length / 2.0;
-        double left = a, right = b;
+        double length = b - a;
+        double left, mid, right;
+        double f_left, f_mid, f_right;
 
-        outTable.add(wr(length, a, b, left, mid, right, f(left), f(mid), f(right)));
+        System.out.printf("%5s%10s%10s%10s%10s%10s%10s%10s%10s%10s\n",
+                "step", "length", "a", "b", "left", "mid", "right", "f_left", "f_mid", "f_right");
 
-        while (length > eps) {
-            mid = left + length / 2.0;
-            left = mid - length / 4.0;
-            right = mid + length / 4.0;
+        if (length > 2 * eps) {
+            mid = a + length / 2;
+            left = mid - length / 4;
+            right = mid + length / 4;
 
-            length = Math.abs(right - left);
-            mid = min_func_val(left, mid, right);
+            f_left = f(left);
+            f_mid = f(mid);
+            f_right = f(right);
 
-            outTable.add(wr(length, a, b, left, mid, right, f(left), f(mid), f(right)));
+            System.out.printf("%5d%10f%10f%10f%10f%10f%10f%10f%10f%10f\n",
+                    step_number, length, a, b, left, mid, right, f_left, f_mid, f_right);
+
+            while (length > 2 * eps) {
+                step_number++;
+                length = length / 2;
+
+                if (f_left < f_mid)
+                    {
+
+                        b = mid;
+                        mid = left;
+                        left = mid - length / 4;
+                        right = mid + length / 4;
+
+                        f_mid = f_left;
+                        f_left = f(left);
+                        f_right = f(right);
+
+                        f_min = min(f_left, f_right, f_mid);
+
+                    }
+                else if (f_mid < f_right)
+                    {
+                        f_min = f_mid;
+                        a = left;
+                        b = right;
+                        left = mid - length / 4;
+                        right = mid + length / 4;
+
+                        f_left = f(left);
+                        f_right = f(right);
+
+                        f_min = min(f_left, f_right, f_mid);
+                    }
+                else if (f_right < f_mid)
+                    {
+                        f_min = f_right;
+                        a = mid;
+                        mid = right;
+                        left = mid - length / 4;
+                        right = mid + length / 4;
+
+                        f_mid = f_right;
+                        f_left = f(left);
+                        f_right = f(right);
+
+                        f_min = min(f_left, f_right, f_mid);
+                    }
+
+                System.out.printf("%5d%10f%10f%10f%10f%10f%10f%10f%10f%10f\n",
+                        step_number, length, a, b, left, mid, right, f_left, f_mid, f_right);
+
+            }
+
+            System.out.println("Количество итераций: " + ++step_number);
+            System.out.println("Количество вызовов функции: " + func_call_amount);
         }
 
-        System.out.printf("\nМетод половинного деления.\nk%13s%15s%16s%17s","delta", "a_k", "b_k","x_1/4");
-        System.out.printf("%16s%16s%17s%16s%16s\n"," x_1/2", "x_3/4", "f(x_1/4)","f(x_1/2)", "f(x_3/4)");
-        outTable.forEach(l -> {
-            System.out.print(outTable.indexOf(l)+"\t");
-            for (String s : l) { System.out.print("\t\t" + s); }
-            System.out.println();
-        });
+        else {
+            f_min = f((b - a) / 2);
+        }
 
-        return f(mid);
+        System.out.printf("Минимальное значение функции: %10f", f_min);
+
+        return f_min;
     }
 
     private double min_func_val(double a, double b, double c){
